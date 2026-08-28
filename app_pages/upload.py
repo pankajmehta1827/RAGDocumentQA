@@ -7,7 +7,6 @@ import streamlit as st
 
 from rag.chunker import chunk_text
 from rag.document_loader import extract_text
-from rag.embeddings import EmbeddingModel
 from rag.vector_store import VectorStore
 
 st.title("Upload documents")
@@ -20,6 +19,8 @@ uploaded_files = st.file_uploader(
 )
 
 if st.button("Process documents", disabled=not uploaded_files):
+    from rag.embeddings import EmbeddingModel  # deferred: heavy torch import
+
     embedder = EmbeddingModel()
     store = st.session_state.vector_store or VectorStore(embedder.dimension)
 

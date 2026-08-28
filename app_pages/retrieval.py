@@ -5,7 +5,6 @@ import os
 
 import streamlit as st
 
-from rag.embeddings import EmbeddingModel
 from rag.llm import generate_answer, list_models
 
 # Static fallback shown if the live model lookup fails.
@@ -70,6 +69,8 @@ if question:
 
         with st.chat_message("assistant"):
             with st.spinner("Retrieving relevant excerpts and generating answer..."):
+                from rag.embeddings import EmbeddingModel  # deferred: heavy torch import
+
                 embedder = EmbeddingModel()
                 query_vector = embedder.embed([question])[0]
                 results = store.search(query_vector, top_k=top_k)
